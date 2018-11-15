@@ -10,9 +10,12 @@ import {
   TextInput,
   Button,
   KeyboardAvoidingView,
+  AsyncStorage,
 } from 'react-native';
 
 const STATUSBAR_HEIGHT = Platform.OS == 'ios' ? 20 : StatusBar.currentHeight;
+const TODO = "@todoapp.todo"
+
 
 export default class App extends React.Component {
   constructor(props){
@@ -21,6 +24,29 @@ export default class App extends React.Component {
       todo: [],
       currentIndex: 0,
       inputText: ""
+    }
+  }
+  componentDidMount(){
+    this.loadTodo()
+  }
+  loadTodo = async() => {
+    try {
+      const todoString = await AsyncStorage.getItem(TODO)
+      if(todoString){
+        const todo = JSON.parse(todoString)
+        const currentIndex = todo.length
+        this.setState({todo: todo, currentIndex: currentIndex})
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  saveTodo = async (todo) => {
+    try {
+      const todoString = JSON.stringify(todo)
+      await AsyncStorage.setItem(TODO, todoString)
+    } catch (e) {
+      console.log(e)
     }
   }
   onAddItem = () => {
@@ -36,6 +62,7 @@ export default class App extends React.Component {
       currentIndex: index,
       inputText: ""
     })
+    this.saveTodo(todo)
   }
   render() {
     return (
