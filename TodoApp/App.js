@@ -23,7 +23,8 @@ export default class App extends React.Component {
     this.state = {
       todo: [],
       currentIndex: 0,
-      inputText: ""
+      inputText: "",
+      filterText: "",
     }
   }
   componentDidMount(){
@@ -65,14 +66,24 @@ export default class App extends React.Component {
     this.saveTodo(todo)
   }
   render() {
+    const filterText = this.state.filterText
+    let todo = this.state.todo
+    if(filterText != ""){
+      todo = todo.filter(t => t.title.includes(filterText))
+    }
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.container}>
           <View style={styles.filter}>
-            <Text>Filletrがここに</Text>
+            <TextInput
+              onChangeText={(text) => this.setState({filterText: text})}
+              value={this.state.filterText}
+              style={styles.inputText}
+              placeholder="Type filter text"
+            />
           </View>
           <ScrollView style={styles.todolist}>
-            <FlatList data={this.state.todo}
+            <FlatList data={todo}
               renderItem={({item}) => <Text>{item.title}</Text>}
               keyExtrantor={({item, index}) => "todo_"+ item.index}
             />
