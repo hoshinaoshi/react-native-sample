@@ -106,11 +106,11 @@ export default class App extends React.Component {
             <FlatList data={todo}
               extraData={this.state}
               renderItem={({item}) =>
-                <TodoItem 
-                  title={item.title}
-                  done={item.done}
-                  onTapTodoItem={() => this.onTapTodoItem(item)}
-                />
+              <TodoItem 
+                title={item.title}
+                done={item.done}
+                onTapTodoItem={() => this.onTapTodoItem(item)}
+              />
               }
               keyExtrantor={({item, index}) => "todo_"+ item.index}
             />
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     height: 100,
     flexDirection: "row"
   },
-    inputText: {
+  inputText: {
     flex: 1,
   },
   inputButton: {
